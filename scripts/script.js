@@ -1,23 +1,29 @@
 document.ready = function() {
+    
     var $design_titles = ["", "game", "graphic", "web", "ux"];
     //var $design_widths = [0, 104, 158, 81, 49];
     var $design_colours = ["#777", "#A40104", "#147CC8", "#39AA50", "#CA7100"];
     var $highlit_title = 0;
     var $selected_title = 0;
-    var $current_projects;
-    var $animSpeed = 300;
+    var $current_category;
+    var $current_project;
+    var $animSpeed = 500;
     var $fadingIn = false;
     
-    $hash = $(location).attr('href').split("#")[1];
-    if ($hash != null){
+/*--------------------*\
+    CATEGORIES
+\*--------------------*/
+    
+    $hash = $(location).attr('href').split("#");
+    if ($hash[1] != null){
         
-        $selected_title = $design_titles.indexOf($hash);
+        $selected_title = $design_titles.indexOf($hash[1]);
         $highlit_title = $selected_title;
-        $current_projects = "."+$design_titles[$selected_title]+"-project";
+        $current_category = "."+$design_titles[$selected_title]+"-project";
         
         changeTitle($selected_title, 0);
         changeHeader($selected_title, 0);
-        changeProjects(0);
+        changeCategory(0);
     }
     
     $('.cat').mouseover(function(){
@@ -37,15 +43,19 @@ document.ready = function() {
     });
     
     $('.cat').click(function(){
-        $selected_title = $(this).attr('id').split('-')[1];
-        if ($current_projects != null) {
-            $($current_projects).each(function(){
-                $(this).stop();
-            });
-            $($current_projects).fadeOut($animSpeed, function(){ changeProjects($animSpeed); });
+        if ($current_project != null) {
+            hideProject();
         }
-        else {
-            changeProjects($animSpeed);
+        if ($selected_title != $highlit_title) {
+            $selected_title = $(this).attr('id').split('-')[1];
+            if ($current_category != null) {
+                $($current_category).stop();
+                $($current_category).fadeOut($animSpeed);
+                setTimeout(function(){ changeCategory($animSpeed); } , $animSpeed);
+            }
+            else {
+                changeCategory($animSpeed);
+            }
         }
     });
     
@@ -63,21 +73,49 @@ document.ready = function() {
         $('header').animate({ backgroundColor: $design_colours[i%$design_titles.length]}, speed);
     }
     
-    function changeProjects(speed){
-        $current_projects = "."+$design_titles[$selected_title]+"-project";
+    function changeCategory(speed){
+        $($current_category).hide();
+        $current_category = "."+$design_titles[$selected_title]+"-project";
         if (speed == 0) {
-            $($current_projects).each(function(){
-                $(this).show();
-            });
+            $($current_category).show();
         }
         else {
             var i = 0;
-            $($current_projects).each(function(){
-                $(this).delay(i*50).fadeIn(speed);
+            $($current_category).each(function(){
+                $(this).show();
+                $(this).css({"opacity":"0", "top":"50px"});
+                $(this).delay(i*120).animate({opacity:1, top:0}, speed, 'easeInOutSine');
                 i+=1;
             });
         }
         changeHeader($selected_title, speed);
+    }
+
+/*--------------------*\
+    PROJECTS
+\*--------------------*/
+    
+    $('.project-link').click(function(){
+        $current_project = $(this).attr('href').split("#")[2];
+        changeProject($animSpeed);
+    });
+    
+    $('.close-project').click(function(){
+        hideProject();
+    });
+    
+    function changeProject(speed){
+        $('.project-list').fadeOut(speed, function(){
+            $('#'+$current_project).fadeIn(speed);
+        });
+    }
+    
+    function hideProject() {
+        $('#'+$current_project).fadeOut($animSpeed, function(){
+            $('.project-list').show();
+            changeCategory($animSpeed);
+            $current_project = null;
+        });
     }
     
 /*--------------------*\

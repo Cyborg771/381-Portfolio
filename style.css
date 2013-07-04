@@ -273,18 +273,45 @@ header ul li {
 }
 
 #main .projects ul li {
+    position:relative;
     display:block;
     display:none;
     width:253px;
     height:129px;
     float:left;
     margin:0 10px 20px;
-    border-radius:5px;
     background-repeat:no-repeat;
     background-position:right;
+    border-radius:5px;
     -moz-border-radius:5px;
 }
 
+#main .project-details {
+    display:none;
+    position:relative;
+    width:780px;
+    min-height:200px;
+    margin:0 auto;
+    background-color:#FFF;
+    border-radius:5px;
+    -moz-border-radius:5px;
+}
+
+#main .project-details .close-project {
+    display:block;
+    position:absolute;
+    right:-15px;
+    top:-15px;
+    width:20px;
+    height:20px;
+    background-color:#fff;
+    text-align:center;
+    line-height:20px;
+    border-radius:15px;
+    -moz-border-radius:15px;
+    font-weight:900;
+    border-width:5px;
+}
 
 #main .game-project {
     background-color:#A40104;
@@ -300,4 +327,20 @@ header ul li {
 
 #main .ux-project {
     background-color:#CA7100;
+}
+
+#main #game-projects .project-details, #game-projects .close-project {
+    border:10px solid #A40104;
+}
+
+#main #graphic-projects .project-details, #graphic-projects .close-project {
+    border:10px solid #147CC8;
+}
+
+#main #web-projects .project-details, #web-projects .close-project {
+    border:10px solid #39AA50;
+}
+
+#main #ux-projects .project-details, #ux-projects .close-project {
+    border:10px solid #CA7100;
 }
